@@ -18,6 +18,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/test_api', function (){
-        return ['message' => 'Hello you have reached the Inovora Core API ']
+Route::post('/test_api', function (Request $request){
+        return ['message' => $request->message ];
 });
