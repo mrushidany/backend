@@ -29,8 +29,24 @@ class TestAuthController extends Controller
         }
     }
 
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+        $user = $this->create($request->all());
+        $registration = $this->guard()->login($user);
 
-
+        if($registration){
+            return response()->json([
+                'status' => 'success',
+                'data' => 'Successful registered the user'
+            ]);
+        }else{
+            return response()->json([
+                'status' => 'error',
+                'data' => 'Registration process failed'
+            ]);
+        }
+    }
 
     protected function validator(array $data)
     {
