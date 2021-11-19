@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class TestAuthController extends Controller
 {
@@ -26,5 +27,17 @@ class TestAuthController extends Controller
                 'data' => 'Unauthorized Access'
             ]);
         }
+    }
+
+
+
+
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required','string', 'min:4']
+        ]);
     }
 }
