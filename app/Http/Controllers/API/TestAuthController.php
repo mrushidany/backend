@@ -9,10 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\CssSelector\Parser\Handler\HashHandler;
 
 class TestAuthController extends Controller
 {
-
 
     public function register(Request $request)
     {
@@ -24,9 +24,38 @@ class TestAuthController extends Controller
         if($validator->fails()){
             return response()->json([
                 'status' => 'failed',
-                'message' => 'Credentials validation error.'
+                'message' => 'Credentials validation error.',
+                'error' => $validator->errors()
             ]);
         }
+        $user_data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password)
+        ];
+        $user_status = User::where('email', $request->email)->first();
+
+        if(!is_null($user_status)) {
+            return response()->json([
+                'status' => 'failed',
+                'data' => 'Whoops! email already registered',
+            ]);
+        }
+
+        $user = User::create($user_data);
+
+        if(!is_null($user)){
+            return response()->json([
+                'status'=> 'success',
+                'data' => 'User registration completed succesfully',
+            ]);
+        }else{
+            return response()->json([
+                'status' => 'failed',
+                'data' => 'User registration failed'
+            ]);
+        }
+
 
 
         // if($registration){
