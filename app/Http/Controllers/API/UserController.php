@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+
+    protected function guard()
+    {
+        return Auth::guard();
+    }
+
     public function login(Request $request)
     {
         $user_credentials = $request->only('email', 'password');
