@@ -8,6 +8,14 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    protected function create($data[])
+    {
+        return User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password'])
+        ]);
+    }
 
     protected function guard()
     {
