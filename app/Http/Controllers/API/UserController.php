@@ -7,9 +7,18 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => ['required','string','max:255'],
+            'email' => ['required','string','email','max:255',]
+        ]);
+    }
+
     protected function create(array $data)
     {
         return User::create([
