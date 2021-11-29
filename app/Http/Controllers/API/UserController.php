@@ -11,11 +11,23 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+        $user = $this->create($request->all());
+        $this->guard()->login($user);
+        return response()->json([
+            'user' => $user,
+            'message' => 'registration successful'
+        ], 200);
+    }
+
     protected function validator(array $data)
     {
         return Validator::make($data, [
             'name' => ['required','string','max:255'],
-            'email' => ['required','string','email','max:255',]
+            'email' => ['required','string','email','max:255','unique:users'],
+            'password' => ['required', 'string', 'min:4'],
         ]);
     }
 
