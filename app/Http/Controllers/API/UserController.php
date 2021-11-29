@@ -27,4 +27,13 @@ class UserController extends Controller
             ], 401);
         }
     }
+
+    public function logout()
+    {
+        Auth::logout();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Succesfull Log Out'
+        ], 200);
+    }
 }
