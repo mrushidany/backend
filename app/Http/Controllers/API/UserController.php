@@ -9,17 +9,28 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
+
 class UserController extends Controller
 {
     public function register(Request $request)
     {
         $this->validator($request->all())->validate();
         $user = $this->create($request->all());
-        $this->guard()->login($user);
-        return response()->json([
-            'user' => $user,
-            'message' => 'registration successful'
-        ], 200);
+
+        if($user){
+            return response()->json([
+                'status' => 'success',
+                'user' => $user,
+                'message' => 'registration successful'
+            ], 200);
+        }else{
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Could not complete the registration'
+            ]);
+        }
+
+
     }
 
     protected function validator(array $data)
